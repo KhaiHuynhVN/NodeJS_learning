@@ -1,25 +1,73 @@
 <html lang='en'>
-   <head>
-      <meta charset='UTF-8' />
-      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-      <link rel="stylesheet" href="/css/app.css">
-      
-      <title>Document</title>
-   </head>
-   <body>
-      <div class='app'>
-         {{> header/header}}
+<head>
+   <meta charset='UTF-8' />
+   <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-         <div class='container'>
-            {{{body}}}
-         </div>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+   <link rel="stylesheet" href="/css/app.css">
 
-         {{> footer/footer}}
+   <title>Document</title>
+</head>
+
+<body>
+   <div class='app'>
+      {{> header/header}}
+
+      <div class='wrapper'>
+         {{{body}}}
       </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-   </body>
+      {{> footer/footer}}
+   </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
+</body>
+<script>
+   "use strict";
+   var windowDefined = "undefined" != typeof window;
+   function init(a) {
+      if (cancelInit()) return !1;
+      if ((a instanceof HTMLElement && (a = [a]), !a.length)) return !1;
+      for (var b, c = 0; c < a.length; c++) (b = a[c]), b instanceof HTMLElement && clampLine(b);
+   }
+   function cancelInit() {
+      if (!windowDefined || !window.getComputedStyle) return !0;
+      var a = document.createElement("div");
+      return !("" !== a.style["-webkit-line-clamp"]);
+   }
+   function clampLine(a) {
+      var b = getMaxHeight(a),
+         c = getTextNode(a);
+      if (b === c.clientHeight) return !1;
+      for (var d, e = c.childNodes.length; 0 <= e; e--)
+         if (((d = c.childNodes[e]), d && (1 === d.nodeType || 3 === d.nodeType)))
+            for (var f = d.textContent, g = f.length; c.clientHeight > b && 1 < g;)
+               (f = f.substr(0, g - 1)), (g = f.length), (d.textContent = f + "\u2026");
+   }
+   function getTextNode(a) {
+      for (var b = document.createElement("div"); a.firstChild;) b.appendChild(a.firstChild);
+      return a.appendChild(b), b;
+   }
+   function getMaxHeight(a) {
+      var b = Math.ceil,
+         c = window.getComputedStyle(a);
+      return "none" === c["max-height"] ? b(parseFloat(c.height)) : b(parseFloat(c["max-height"]));
+   }
+   "undefined" != typeof module && module.exports
+      ? (module.exports = init)
+      : windowDefined && (window.Clamps = init);
+
+</script>
+<script>
+   const cardTextEl = document.querySelectorAll('.card-text')
+   Clamps(cardTextEl);
+</script>
+
 </html>

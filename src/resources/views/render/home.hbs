@@ -1,1 +1,20 @@
-<h1>Home page</h1>
+<div class="d-flex mt-5 container">
+   <div class="row">
+      {{#each courses}}
+      <div class="col-4 mb-4 d-flex">
+         <div class="card">
+            <img style="height: 200px; object-fit: contain;" src={{this.img}} alt={{this.name}} />
+            <div class="card-body d-flex flex-column">
+               <h5 class="card-title text-center">{{this.name}}</h5>
+               <p style="overflow: hidden;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 11;
+                        -webkit-box-orient: vertical;
+                        text-overflow: ellipsis;" class="card-text">{{this.decription}}</p>
+               <a href="#" class="btn btn-primary mt-auto">Bắt đầu học</a>
+            </div>
+         </div>
+      </div>
+      {{/each}}
+   </div>
+</div>

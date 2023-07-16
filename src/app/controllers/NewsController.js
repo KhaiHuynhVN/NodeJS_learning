@@ -1,12 +1,12 @@
 class NewsController {
    // GET /news
    index(req, res) {
-      res.render('render/news');
+      res.render("render/news");
    }
 
-   // GET /:posts
+   // GET /news/:posts
    post(req, res) {
-      res.send('DemonVN');
+      res.send("DemonVN");
    }
 }
 
