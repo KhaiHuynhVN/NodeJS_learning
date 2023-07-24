@@ -1,0 +1,32 @@
+<div class="grid wide">
+    <table class="table">
+        <h2>Video của tôi</h2>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col" style="min-width: 111px;">Thời gian tạo</th>
+                <th scope="col" style="min-width: 111px;">Cập nhật lúc</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each videos}}
+            <tr>
+                <th scope="row">{{increment @index}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.decription}}</td>
+                <td style="min-width: 111px;">{{formatDate this.createdAt}}</td>
+                <td style="min-width: 111px;">{{formatDate this.updatedAt}}</td>
+                <td>
+                    <a href="/videos/{{this._id}}/edit" class="btn btn-dark btn-sm">Sửa</a>
+                    <form method="POST" action="/videos/{{this._id}}?_method=DELETE">
+                        <button class="btn btn-danger btn-sm mt-2">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
