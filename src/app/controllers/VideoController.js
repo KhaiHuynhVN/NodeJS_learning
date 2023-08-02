@@ -7,6 +7,10 @@ class VideoController {
       try {
          const videos = await Videos.findOne({ slug: req.params.slug });
 
+         // Chức năng tìm kiếm
+         // const videos2 = await Videos.findOne({ name: { $regex: 'ml', $options: 'i' } });
+         // console.log(mongooseToObject(videos2));
+
          if (!videos) {
             console.log('Chuyển đến trang 404');
          }
@@ -39,7 +43,7 @@ class VideoController {
    // PATCH /videos/:id
    async update(req, res, next) {
       try {
-         const formData = req.body;
+         const formData = { ...req.body };
          formData.img = `https://img.youtube.com/vi/${req.body.videoId}/hqdefault.jpg`;
          await Videos.updateOne({ _id: req.params.id }, formData);
          res.redirect('/me/stored/videos');
@@ -51,8 +55,32 @@ class VideoController {
    // DELETE /videos/:ID
    async delete(req, res, next) {
       try {
-         await Videos.deleteOne({ _id: req.params.ID });
-         res.redirect('/me/stored/videos');
+         await Videos.delete({ _id: req.params.ID });
+         res.redirect('back');
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   // DELETE /videos/destroy/:id
+   async permanentlyDestroy(req, res, next) {
+      try {
+         await Videos.updateOneDeleted({ _id: req.params.id }, { permanentlyDestroy: true });
+         res.redirect('back');
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   // PATCH /videos/restore/:id
+   async restore(req, res, next) {
+      try {
+         // await Videos.restore({ _id: req.params.id }, { restoreAt: Date.now() });
+         await Videos.updateOneDeleted(
+            { _id: req.params.id },
+            { $unset: { deletedAt: true, deleted: true }, restoreAt: Date.now() },
+         );
+         res.redirect('/me/trash/videos');
       } catch (error) {
          next(error);
       }
@@ -61,13 +89,59 @@ class VideoController {
    // POST /videos/store
    async store(req, res, next) {
       try {
-         const formData = req.body;
+         const formData = { ...req.body };
          formData.img = `https://img.youtube.com/vi/${req.body.videoId}/hqdefault.jpg`;
          const course = new Videos(formData);
          await course.save();
          res.redirect('/me/stored/videos');
       } catch (error) {
          next(error);
+      }
+   }
+
+   // POST /videos/handle-form-action
+   async handleFormAction(req, res, next) {
+      switch (req.body.action) {
+         case 'delete':
+            try {
+               await Videos.delete({ _id: { $in: req.body.checkboxVideoIds } });
+               res.redirect('back');
+            } catch (error) {
+               next(error);
+            }
+            break;
+         default:
+            throw new Error(`Invalid action: ${req.body.action}`);
+      }
+   }
+
+   // POST /videos/handle-trash-video-action
+   async handleTrashVideoAction(req, res, next) {
+      switch (req.body.action) {
+         case 'permanentlyDestroy':
+            try {
+               await Videos.updateManyDeleted(
+                  { _id: { $in: req.body.checkboxVideoIds } },
+                  { permanentlyDestroy: true },
+               );
+               res.redirect('back');
+            } catch (error) {
+               next(error);
+            }
+            break;
+         case 'restore':
+            try {
+               await Videos.updateManyDeleted(
+                  { _id: { $in: req.body.checkboxVideoIds } },
+                  { $unset: { deletedAt: true, deleted: true }, restoreAt: Date.now() },
+               );
+               res.redirect('/me/trash/videos');
+            } catch (error) {
+               next(error);
+            }
+            break;
+         default:
+            throw new Error(`Invalid action: ${req.body.action}`);
       }
    }
 }

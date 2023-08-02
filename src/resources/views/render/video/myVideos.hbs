@@ -1,32 +1,150 @@
-<div class="grid wide">
+<form class="grid wide mt-4 form-container" method="post" action="/videos/handle-form-action">
+    <h2>Video của tôi</h2>
+    <a href="/me/trash/videos" class="btn btn-primary btn-sm ms-1">
+        <div class="d-flex align-items-center">
+            Thùng rác
+            <i class="fa-solid fa-trash-xmark ms-2 mx-2"></i>
+            {{#if deletedVideoCount}}
+            <div
+                style="background-color: rgb(255, 255, 255); border-radius: 1000px; width: 20px; height: 20px; color: blue;">
+                {{deletedVideoCount}}
+            </div>
+            {{/if}}
+        </div>
+    </a>
+
+    <h4 class="mt-1">Có {{count}} video</h4>
+
+    <div class="mt-4 d-flex align-items-center">
+        <div class="form-check flex-shrink-0">
+            <input class="form-check-input" style="outline: 1px solid black; cursor: pointer;" type="checkbox"
+                id="checkAll">
+            <label class="form-check-label" style="cursor: pointer;" for="checkAll">
+                Chọn tất cả
+            </label>
+        </div>
+
+        <select required name="action" id="select-action" class="form-select form-select-sm ms-3"
+            style="width: 200px; cursor: pointer;" aria-label="Default select example">
+            <option selected value="">-- Chọn tác vụ --</option>
+            <option style="padding-right: 10px;" value="delete">Xóa</option>
+        </select>
+
+        <button id="exec-btn" class="btn btn-dark btn-sm flex-shrink-0 ms-3 disabled">Thực hiện</button>
+    </div>
     <table class="table">
-        <h2>Video của tôi</h2>
         <thead>
+            {{#if videos}}
             <tr>
-                <th scope="col">#</th>
+                <th scope="col" colspan="2">#</th>
                 <th scope="col">Tiêu đề</th>
                 <th scope="col">Mô tả</th>
                 <th scope="col" style="min-width: 111px;">Thời gian tạo</th>
                 <th scope="col" style="min-width: 111px;">Cập nhật lúc</th>
                 <th scope="col"></th>
             </tr>
+            {{/if}}
         </thead>
         <tbody>
             {{#each videos}}
             <tr>
+                <td>
+                    <div class="form-check flex-shrink-0">
+                        <input class="form-check-input" name="checkboxVideoIds[]"
+                            style="outline: 1px solid black; cursor: pointer;" type="checkbox" value="{{this._id}}">
+                    </div>
+                </td>
                 <th scope="row">{{increment @index}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.decription}}</td>
                 <td style="min-width: 111px;">{{formatDate this.createdAt}}</td>
                 <td style="min-width: 111px;">{{formatDate this.updatedAt}}</td>
-                <td>
+                <td style="display: flex; flex-direction: column;">
                     <a href="/videos/{{this._id}}/edit" class="btn btn-dark btn-sm">Sửa</a>
-                    <form method="POST" action="/videos/{{this._id}}?_method=DELETE">
-                        <button class="btn btn-danger btn-sm mt-2">Xóa</button>
-                    </form>
+                    <button data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        data-bs-whatever='{"id": "{{this._id}}", "name": "{{this.name}}"}'
+                        class="btn btn-danger btn-sm mt-2">Xóa</button>
+                </td>
+            </tr>
+
+            {{else}}
+            <tr>
+                <td colspan="6">
+                    <div class="d-flex" style="align-items: center; justify-content: center;">
+                        <h5 style="margin-bottom: unset;">
+                            Chưa có video nào :(
+                        </h5>
+                        <a href="/videos/create" class="btn btn-dark btn-sm ms-1">Đăng video mới!</a>
+                    </div>
                 </td>
             </tr>
             {{/each}}
         </tbody>
     </table>
+</form>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa video</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary">Xác nhận</button>
+            </div>
+        </form>
+    </div>
 </div>
+
+
+<script>
+    // Modal boostrap
+    const deleteModal = document.getElementById('deleteModal');
+
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            const recipient = button.getAttribute('data-bs-whatever');
+            const parseRecipient = JSON.parse(recipient);
+
+            const modalTitle = deleteModal.querySelector('.modal-title');
+            const modalContent = deleteModal.querySelector('.modal-content');
+
+            modalTitle.textContent = `Bạn có chắc muốn xóa video: "${parseRecipient.name}"?`;
+            modalContent.action = `/videos/${parseRecipient.id}?_method=DELETE`
+        });
+    }
+
+    // Check box all handle
+    const checkboxAll = $('#checkAll');
+    const checkboxItems = $('[name="checkboxVideoIds[]"]');
+    const execBtn = $('#exec-btn');
+
+    checkboxAll.change((e) => {
+        const isChecked = e.target.checked;
+
+        checkboxItems.prop('checked', isChecked);
+        reRenderCheckAllBtn();
+    });
+
+    checkboxItems.change((e) => {
+        const checkboxItemsCount = checkboxItems.length;
+        const checkedItemsCount = $('[name="checkboxVideoIds[]"]:checked').length;
+
+        checkboxAll.prop('checked', checkboxItemsCount === checkedItemsCount);
+        reRenderCheckAllBtn();
+    });
+
+    function reRenderCheckAllBtn() {
+        const checkedItemsCount = $('[name="checkboxVideoIds[]"]:checked').length > 0;
+
+        checkedItemsCount ?
+            execBtn.removeClass('disabled') :
+            execBtn.addClass('disabled');
+    }
+
+</script>
