@@ -5,7 +5,7 @@ class SiteController {
    // GET /
    async home(req, res, next) {
       try {
-         const videos = await Videos.find({});
+         const videos = await Videos.find({}).sort({ createdAt: 1 });
          // console.log(JSON.parse(JSON.stringify(courses)));
 
          res.render('render/home', {

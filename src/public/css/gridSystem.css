@@ -71,6 +71,10 @@
   margin-left: 0;
   margin-right: 0; }
 
+.row.all-no-stretch {
+  margin-left: 0;
+  margin-right: 0; }
+
 .row > * {
   display: block;
   flex-shrink: 0;
@@ -503,6 +507,12 @@
     margin-top: calc(-1 * var(--col-sm-gutter-y));
     margin-right: calc(-0.5 * var(--col-sm-gutter-x));
     margin-left: calc(-0.5 * var(--col-sm-gutter-x)); }
+  .row.no-stretch {
+    margin-right: calc(-0.5 * var(--col-sm-gutter-x));
+    margin-left: calc(-0.5 * var(--col-sm-gutter-x)); }
+  .row.sm-no-stretch {
+    margin-right: 0;
+    margin-left: 0; }
   .col-sm,
   .col-sm-1,
   .col-sm-1-09,
@@ -854,6 +864,13 @@
     margin-top: calc(-1 * var(--col-md-gutter-y));
     margin-right: calc(-0.5 * var(--col-md-gutter-x));
     margin-left: calc(-0.5 * var(--col-md-gutter-x)); }
+  .row.no-stretch,
+  .row.sm-no-stretch {
+    margin-right: calc(-0.5 * var(--col-md-gutter-x));
+    margin-left: calc(-0.5 * var(--col-md-gutter-x)); }
+  .row.md-no-stretch {
+    margin-right: 0;
+    margin-left: 0; }
   .col-md,
   .col-md-1,
   .col-md-1-09,
@@ -1205,6 +1222,14 @@
     margin-top: calc(-1 * var(--col-lg-gutter-y));
     margin-right: calc(-0.5 * var(--col-lg-gutter-x));
     margin-left: calc(-0.5 * var(--col-lg-gutter-x)); }
+  .row.no-stretch,
+  .row.sm-no-stretch,
+  .row.md-no-stretch {
+    margin-right: calc(-0.5 * var(--col-lg-gutter-x));
+    margin-left: calc(-0.5 * var(--col-lg-gutter-x)); }
+  .row.lg-no-stretch {
+    margin-right: 0;
+    margin-left: 0; }
   .col-lg,
   .col-lg-1,
   .col-lg-1-09,
@@ -1556,6 +1581,15 @@
     margin-top: calc(-1 * var(--col-xl-gutter-y));
     margin-right: calc(-0.5 * var(--col-xl-gutter-x));
     margin-left: calc(-0.5 * var(--col-xl-gutter-x)); }
+  .row.no-stretch,
+  .row.sm-no-stretch,
+  .row.md-no-stretch,
+  .row.lg-no-stretch {
+    margin-right: calc(-0.5 * var(--col-xl-gutter-x));
+    margin-left: calc(-0.5 * var(--col-xl-gutter-x)); }
+  .row.xl-no-stretch {
+    margin-right: 0;
+    margin-left: 0; }
   .col-xl,
   .col-xl-1,
   .col-xl-1-09,
@@ -1907,6 +1941,16 @@
     margin-top: calc(-1 * var(--col-xxl-gutter-y));
     margin-right: calc(-0.5 * var(--col-xxl-gutter-x));
     margin-left: calc(-0.5 * var(--col-xxl-gutter-x)); }
+  .row.no-stretch,
+  .row.sm-no-stretch,
+  .row.md-no-stretch,
+  .row.lg-no-stretch,
+  .row.xl-no-stretch {
+    margin-right: calc(-0.5 * var(--col-xxl-gutter-x));
+    margin-left: calc(-0.5 * var(--col-xxl-gutter-x)); }
+  .row.xxl-no-stretch {
+    margin-right: 0;
+    margin-left: 0; }
   .col-xxl,
   .col-xxl-1,
   .col-xxl-1-09,

@@ -1,32 +1,26 @@
 * {
-   padding: 0;
-   margin: 0;
-   box-sizing: border-box;
-}
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box; }
 
 html *::-webkit-scrollbar {
-   border-radius: 0;
-   width: 8px;
-}
+  border-radius: 0;
+  width: 8px; }
 
 html *::-webkit-scrollbar-thumb {
-   border-radius: 4px;
-   background-color: rgba(22, 24, 35, 0.1);
-}
+  border-radius: 4px;
+  background-color: rgba(22, 24, 35, 0.1); }
 
 html *::-webkit-scrollbar-track {
-   border-radius: 0;
-   background-color: rgba(0, 0, 0, 0);
-}
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0); }
 
 a {
-   color: black;
-   text-decoration: none;
-}
+  color: black;
+  text-decoration: none; }
 
 .psn-sticky {
-   position: -webkit-sticky;
-   position: sticky;
-   top: 0;
-   z-index: 1000;
-}
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1000; }

@@ -116,7 +116,7 @@ class VideoController {
    }
 
    // POST /videos/handle-trash-video-action
-   async handleTrashVideoAction(req, res, next) {
+   async handleTrashVideoFormAction(req, res, next) {
       switch (req.body.action) {
          case 'permanentlyDestroy':
             try {

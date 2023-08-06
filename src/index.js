@@ -5,16 +5,16 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express();
 const methodOverride = require('method-override');
-const port = 3111;
+const port = 3112;
 
 const route = require('./routes');
 const db = require('./config/db');
+const SortMiddleWare = require('./app/middlewares/SortMiddleWare');
 
 // Connect DB
 db.connect();
 
-app.use(express.static(path.join(__dirname, 'public')));
-
+// Define req.body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -23,6 +23,12 @@ app.use(morgan('combined'));
 
 // Method override
 app.use(methodOverride('_method'));
+
+// Custom middlewares
+app.use(SortMiddleWare);
+
+// Set up public for handlebars engine
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Template engine
 app.engine(
@@ -37,6 +43,38 @@ app.engine(
                oldDate.getMonth() + 1
             }/${oldDate.getFullYear()} (${oldDate.getHours()}:${oldDate.getMinutes()}:${oldDate.getSeconds()})`;
             return formattedDate;
+         },
+         sortIcons(field, sort) {
+            let sortType = field === sort.column ? sort.type : 'default';
+
+            const icons = {
+               default: `
+                        <i style="display: block; color: blue; font-size: 20px" 
+                           class="fa-duotone fa-circle-sort"></i>
+                        `,
+               asc: `
+                     <i style="display: block; color: blue; font-size: 20px" 
+                        class="fa-regular fa-arrow-down-short-wide"></i>
+                     `,
+               desc: `
+                     <i style="display: block; color: blue; font-size: 20px" 
+                        class="fa-regular fa-arrow-up-short-wide"></i>
+                     `,
+            };
+
+            const types = {
+               default: 'asc',
+               asc: 'desc',
+               desc: 'default',
+            };
+
+            return `
+                     <a class="ms-2" style="display: inline-block; width: 20px; height: 20px" 
+                        href="?${sort.key}&column=${field}&type=${types[sortType]}"
+                     >
+                        ${icons[sortType]}
+                     </a>
+                  `;
          },
       },
    }),

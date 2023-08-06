@@ -16,15 +16,7 @@
     <h4 class="mt-1">Có {{count}} video</h4>
 
     <div class="mt-4 d-flex align-items-center">
-        <div class="form-check flex-shrink-0">
-            <input class="form-check-input" style="outline: 1px solid black; cursor: pointer;" type="checkbox"
-                id="checkAll">
-            <label class="form-check-label" style="cursor: pointer;" for="checkAll">
-                Chọn tất cả
-            </label>
-        </div>
-
-        <select required name="action" id="select-action" class="form-select form-select-sm ms-3"
+        <select required name="action" id="select-action" class="form-select form-select-sm"
             style="width: 200px; cursor: pointer;" aria-label="Default select example">
             <option selected value="">-- Chọn tác vụ --</option>
             <option style="padding-right: 10px;" value="delete">Xóa</option>
@@ -32,15 +24,42 @@
 
         <button id="exec-btn" class="btn btn-dark btn-sm flex-shrink-0 ms-3 disabled">Thực hiện</button>
     </div>
+
     <table class="table">
         <thead>
             {{#if videos}}
             <tr>
-                <th scope="col" colspan="2">#</th>
-                <th scope="col">Tiêu đề</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col" style="min-width: 111px;">Thời gian tạo</th>
-                <th scope="col" style="min-width: 111px;">Cập nhật lúc</th>
+                <th scope="col">
+                    <div class="flex-shrink-0" style="margin-bottom: 2px;">
+                        <input class="form-check-input mt-0" style="outline: 1px solid black; cursor: pointer;"
+                            type="checkbox" id="checkAll">
+                    </div>
+                </th>
+                <th scope="col">#</th>
+                <th scope="col" style="min-width: 112px;">
+                    <div class="d-flex align-items-center">
+                        Tiêu đề
+                        {{{sortIcons 'name' _storedVideoSort}}}
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="d-flex align-items-center">
+                        Mô tả
+                        {{{sortIcons 'decription' _storedVideoSort}}}
+                    </div>
+                </th>
+                <th scope="col" style="min-width: 144px;">
+                    <div class="d-flex align-items-center">
+                        Thời gian tạo
+                        {{{sortIcons 'createdAt' _storedVideoSort}}}
+                    </div>
+                </th>
+                <th scope="col" style="min-width: 144px;">
+                    <div class="d-flex align-items-center">
+                        Cập nhật lúc
+                        {{{sortIcons 'updatedAt' _storedVideoSort}}}
+                    </div>
+                </th>
                 <th scope="col"></th>
             </tr>
             {{/if}}
@@ -63,7 +82,7 @@
                     <a href="/videos/{{this._id}}/edit" class="btn btn-dark btn-sm">Sửa</a>
                     <button data-bs-toggle="modal" data-bs-target="#deleteModal"
                         data-bs-whatever='{"id": "{{this._id}}", "name": "{{this.name}}"}'
-                        class="btn btn-danger btn-sm mt-2">Xóa</button>
+                        class="delete-btn btn btn-danger btn-sm mt-2">Xóa</button>
                 </td>
             </tr>
 
@@ -123,6 +142,7 @@
     const checkboxAll = $('#checkAll');
     const checkboxItems = $('[name="checkboxVideoIds[]"]');
     const execBtn = $('#exec-btn');
+    const formContainer = $('.form-container');
 
     checkboxAll.change((e) => {
         const isChecked = e.target.checked;
@@ -139,6 +159,11 @@
         reRenderCheckAllBtn();
     });
 
+    formContainer.submit((e) => {
+        const checkedItemsCount = $('[name="checkboxVideoIds[]"]:checked').length;
+        checkedItemsCount <= 0 && e.preventDefault();
+    })
+
     function reRenderCheckAllBtn() {
         const checkedItemsCount = $('[name="checkboxVideoIds[]"]:checked').length > 0;
 
@@ -147,4 +172,7 @@
             execBtn.addClass('disabled');
     }
 
+    // Cancel default submit form
+    const deleteBtns = $('.delete-btn');
+    deleteBtns.click(e => e.preventDefault());
 </script>

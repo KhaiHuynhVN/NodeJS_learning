@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="./src/public/css/gridSystem.css" />
+      <link rel="stylesheet" href="../src/public/css/gridSystem.css" />
       <title>Document</title>
 
       <style>
@@ -14,8 +14,8 @@
             text-rendering: optimizeSpeed;
          }
 
-         .container {
-            /* --col-gutter-x: 5px;
+         /* .container {
+            --col-gutter-x: 5px;
             --col-sm-gutter-x: 10px;
             --col-md-gutter-x: 15px;
             --col-lg-gutter-x: 20px;
@@ -26,14 +26,16 @@
             --col-md-gutter-y: 15px;
             --col-lg-gutter-y: 20px;
             --col-xl-gutter-y: 25px;
-            --col-xxl-gutter-y: 30px; */
-         }
+            --col-xxl-gutter-y: 30px;
+         } */
       </style>
    </head>
    <body>
       <div class="grid container">
          <!-- class="row no-stretch row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4" -->
-         <div class="row no-stretch">
+         <div
+            class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 all-no-stretch"
+         >
             <div class="col">
                <h2 style="background: yellow; text-align: center">item</h2>
             </div>
@@ -61,4 +63,36 @@
          </div>
       </div>
    </body>
+
+   <script>
+      const myArray2 = [
+         {
+            id: 1,
+            name: 'DemonVN',
+            age: 23,
+         },
+         {
+            id: 2,
+            name: 'LTTN',
+            age: 18,
+         },
+         {
+            id: 3,
+            name: 'Ca Rot',
+            age: 0,
+         },
+      ];
+
+      const myObject2 = myArray2.reduce((acc, cur) => {
+         return { ...acc, [cur.id]: cur };
+      }, {});
+
+      console.log(myObject2);
+
+      const toArray = Object.entries(myObject2);
+      const store = [];
+      toArray.forEach((item) => {
+         store.push(item[1]);
+      });
+   </script>
 </html>

@@ -2,15 +2,25 @@ const Videos = require('../models/Videos');
 const { mongooseToObjectForArray } = require('../../ulti/mongoose');
 
 class MeController {
-   // GET me/stored/videos
+   // GET /me/stored/videos
    async myVideos(req, res, next) {
       try {
-         const videos = await Videos.find({});
+         let videos;
+
+         if (req.query.hasOwnProperty('_storedVideoSort')) {
+            console.log(req.query.type, req.query.column);
+            req.query.type === 'default'
+               ? (videos = await Videos.find({}))
+               : (videos = await Videos.find({}).sort({ [req.query.column]: req.query.type }));
+         } else {
+            videos = await Videos.find({}).sort({ createdAt: 'asc' });
+         }
+
          const deletedVideoCount = await Videos.countDocumentsWithDeleted({
             deleted: true,
             permanentlyDestroy: null,
          });
-         // const count = mongooseToObjectForArray(videos).length;
+
          const count = await Videos.countDocuments({});
 
          res.render('render/video/myVideos', {
@@ -28,15 +38,33 @@ class MeController {
       }
    }
 
-   // GET me/stored/news
+   // GET /me/stored/news
    async showNews(req, res, next) {
       res.render('render/new/showNews');
    }
 
-   // GET me/trash/videos
+   // GET /me/trash/videos
    async trashVideos(req, res, next) {
       try {
-         const videos = await Videos.findWithDeleted({ deleted: true, permanentlyDestroy: null });
+         let videos;
+
+         if (req.query.hasOwnProperty('_trashSort')) {
+            req.query.type === 'default'
+               ? (videos = await Videos.findWithDeleted({
+                    deleted: true,
+                    permanentlyDestroy: null,
+                 }))
+               : (videos = await Videos.findWithDeleted({
+                    deleted: true,
+                    permanentlyDestroy: null,
+                 }).sort({ [req.query.column]: req.query.type }));
+         } else {
+            videos = await Videos.findWithDeleted({
+               deleted: true,
+               permanentlyDestroy: null,
+            }).sort({ deletedAt: 'asc' });
+         }
+
          const count = await Videos.countDocumentsWithDeleted({
             deleted: true,
             permanentlyDestroy: null,

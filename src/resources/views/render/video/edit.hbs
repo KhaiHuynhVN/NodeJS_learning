@@ -1,6 +1,10 @@
 {{#with video}}
 <div class="mt-4 grid wide">
     <h1>Cập nhật video</h1>
+    <a href="/me/stored/videos" class="btn btn-primary btn-sm ms-1">
+        <i class="fa-regular fa-chevron-left mx-1"></i>
+        Trở về
+    </a>
     <form class="mt-4" method="post" action="/videos/{{this._id}}?_method=PATCH">
         <div class="mb-3">
             <label for="courseName" class="form-label">Tiêu đề</label>

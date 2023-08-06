@@ -6,7 +6,7 @@ const VideoController = require('../app/controllers/VideoController');
 router.get('/create', VideoController.create);
 router.post('/store', VideoController.store);
 router.post('/handle-form-action', VideoController.handleFormAction);
-router.post('/handle-trash-video-action', VideoController.handleTrashVideoAction);
+router.post('/handle-trash-video-form-action', VideoController.handleTrashVideoFormAction);
 router.get('/:id/edit', VideoController.edit);
 router.patch('/:id', VideoController.update);
 router.patch('/restore/:id', VideoController.restore);

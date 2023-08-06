@@ -18,3 +18,13 @@
 //    action: 'delete',
 //    ids: ['123456'],
 // };
+
+// Middleware là gì?
+
+// Nhà ========================> Người bảo vệ 1 (kiểm tra): Người bảo vệ 2 (kiểm tra) :Sự kiện
+// Nhà <======================== Sự kiện
+
+// - Kiểm tra xem dữ liệu có đúng không.
+// - Nếu đúng --> Cho phép truy cập.
+// - Nếu sai --> Không cho phép truy cập.
+// - Trước khi cho phép truy cập hoặc không cho phép truy cập thì sẽ chỉnh sửa / thêm / bớt vào dữ liệu
