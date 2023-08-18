@@ -8,7 +8,6 @@ class MeController {
          let videos;
 
          if (req.query.hasOwnProperty('_storedVideoSort')) {
-            console.log(req.query.type, req.query.column);
             req.query.type === 'default'
                ? (videos = await Videos.find({}))
                : (videos = await Videos.find({}).sort({ [req.query.column]: req.query.type }));

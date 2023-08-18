@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const Videos = new Schema(
    {
       name: { type: String, require: true },
-      decription: { type: String, require: true },
+      description: { type: String, require: true },
       img: { type: String, require: true },
       videoId: { type: String, require: true },
       slug: { type: String, slug: ['name', '_id'], unique: true },

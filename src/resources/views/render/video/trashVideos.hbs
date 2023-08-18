@@ -35,7 +35,7 @@
                 </th>
                 <th scope="col">
                     Mô tả
-                    {{{sortIcons 'decription' _trashSort}}}
+                    {{{sortIcons 'description' _trashSort}}}
                 </th>
                 <th scope="col" style="min-width: 111px;">
                     Thời gian xóa
@@ -56,7 +56,7 @@
                 </td>
                 <th scope="row">{{increment @index}}</th>
                 <td>{{this.name}}</td>
-                <td>{{this.decription}}</td>
+                <td>{{this.description}}</td>
                 <td style="min-width: 111px;">{{formatDate this.deletedAt}}</td>
                 <td style="display: flex; flex-direction: column;">
                     <button data-bs-toggle="modal" data-bs-target="#deleteModal" href="/videos/{{this._id}}/edit"

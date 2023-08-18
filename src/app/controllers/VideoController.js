@@ -7,10 +7,6 @@ class VideoController {
       try {
          const videos = await Videos.findOne({ slug: req.params.slug });
 
-         // Chức năng tìm kiếm
-         // const videos2 = await Videos.findOne({ name: { $regex: 'ml', $options: 'i' } });
-         // console.log(mongooseToObject(videos2));
-
          if (!videos) {
             console.log('Chuyển đến trang 404');
          }
@@ -78,7 +74,7 @@ class VideoController {
          // await Videos.restore({ _id: req.params.id }, { restoreAt: Date.now() });
          await Videos.updateOneDeleted(
             { _id: req.params.id },
-            { $unset: { deletedAt: true, deleted: true }, restoreAt: Date.now() },
+            { $unset: { deletedAt: true }, deleted: false, restoreAt: Date.now() },
          );
          res.redirect('/me/trash/videos');
       } catch (error) {
@@ -133,7 +129,7 @@ class VideoController {
             try {
                await Videos.updateManyDeleted(
                   { _id: { $in: req.body.checkboxVideoIds } },
-                  { $unset: { deletedAt: true, deleted: true }, restoreAt: Date.now() },
+                  { $unset: { deletedAt: true }, deleted: false, restoreAt: Date.now() },
                );
                res.redirect('/me/trash/videos');
             } catch (error) {
